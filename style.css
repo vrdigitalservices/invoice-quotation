@@ -1,78 +1,223 @@
+/* Basic reset and fonts */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url('assets/warli-bg.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    margin: 0;
-    padding: 0;
-    color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #faf8f0;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  background-image: url('https://i.imgur.com/EY6bXmG.png'); /* Simple subtle Warli pattern background */
+  background-repeat: repeat;
+  background-size: 150px 150px;
+  color: #333;
 }
 
 .container {
-    max-width: 800px;
-    margin: 2rem auto;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 25px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+  border-radius: 8px;
 }
 
-.logo {
-    width: 120px;
-    display: block;
-    margin-bottom: 1rem;
+.company-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
-header h1 {
-    margin: 0 0 0.3rem 0;
-    color: #5b2c6f;
+.company-logo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
 }
 
-header p, header a {
-    margin: 0;
-    font-size: 0.9rem;
+h1,
+h2,
+h3 {
+  margin: 10px 0;
 }
 
 form label {
-    display: block;
-    margin-top: 1rem;
-    font-weight: 600;
+  display: block;
+  margin: 12px 0 5px;
+  font-weight: 600;
 }
 
-form input, form select, form textarea {
-    width: 100%;
-    margin-top: 0.3rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-family: inherit;
+form input[type='text'],
+form input[type='email'],
+form input[type='tel'],
+form input[type='number'],
+form input[type='date'],
+form select,
+form textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
-button#downloadBtn {
-    margin-top: 1.5rem;
-    background-color: #5b2c6f;
-    color: #fff;
-    border: none;
-    padding: 0.7rem 1.5rem;
-    font-size: 1.1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+form input[type='text']:focus,
+form input[type='email']:focus,
+form input[type='tel']:focus,
+form input[type='number']:focus,
+form input[type='date']:focus,
+form select:focus,
+form textarea:focus {
+  border-color: #4caf50;
+  outline: none;
 }
 
-button#downloadBtn:hover {
-    background-color: #462156;
+#items-container {
+  margin-bottom: 15px;
 }
 
-.bank-details {
-    background-color: #f4f4f4;
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border-radius: 8px;
-    font-style: italic;
-    color: #666;
+.item-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.item-row input {
+  flex: 1;
+}
+
+.item-row input[name='itemQty'],
+.item-row input[name='itemPrice'] {
+  max-width: 90px;
+}
+
+.remove-item-btn {
+  background: #e74c3c;
+  border: none;
+  color: white;
+  padding: 0 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+.remove-item-btn:hover {
+  background: #c0392b;
+}
+
+#add-item-btn {
+  background: #27ae60;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+}
+
+#add-item-btn:hover {
+  background: #219150;
+}
+
+#generate-btn {
+  background: #2e86de;
+  color: white;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+#generate-btn:hover {
+  background: #1b4f72;
+}
+
+/* Invoice preview styling for PDF */
+.invoice-preview {
+  width: 794px; /* A4 width in px at 96dpi approx */
+  padding: 30px;
+  background: white;
+  font-family: Arial, sans-serif;
+  color: #222;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.invoice-preview header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.invoice-preview header img {
+  width: 100px;
+  height: auto;
+}
+
+.invoice-preview header .company-info {
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+.invoice-preview h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.invoice-preview .section {
+  margin-bottom: 20px;
+}
+
+.invoice-preview .section h3 {
+  border-bottom: 1px solid #666;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.invoice-preview table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invoice-preview table,
+.invoice-preview th,
+.invoice-preview td {
+  border: 1px solid #ccc;
+}
+
+.invoice-preview th,
+.invoice-preview td {
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.invoice-preview th {
+  background: #f2f2f2;
+}
+
+.invoice-preview .totals {
+  float: right;
+  width: 250px;
+  margin-top: 10px;
+}
+
+.invoice-preview .totals table {
+  border: none;
+}
+
+.invoice-preview .totals th,
+.invoice-preview .totals td {
+  border: none;
+  padding: 8px 12px;
+  font-weight: 700;
+  text-align: right;
 }
