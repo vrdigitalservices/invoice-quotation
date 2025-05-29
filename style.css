@@ -1,0 +1,78 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('assets/warli-bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.logo {
+    width: 120px;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+header h1 {
+    margin: 0 0 0.3rem 0;
+    color: #5b2c6f;
+}
+
+header p, header a {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+form input, form select, form textarea {
+    width: 100%;
+    margin-top: 0.3rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+button#downloadBtn {
+    margin-top: 1.5rem;
+    background-color: #5b2c6f;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button#downloadBtn:hover {
+    background-color: #462156;
+}
+
+.bank-details {
+    background-color: #f4f4f4;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-style: italic;
+    color: #666;
+}
