@@ -1,75 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Universal Tribes Invoice & Quotation Tool</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Universal Tribes Invoice & Quotation Tool</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Libraries for PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header class="company-header">
-            <img src="https://drive.google.com/uc?export=view&id=15pbzbPmjxhMwwKelKp9jhFIsGOMjooJK" alt="Universal Tribes Logo" class="company-logo" />
-            <h1>Universal Tribes</h1>
-        </header>
+  <div class="container">
+    <header class="company-header">
+      <img
+        src="https://drive.google.com/uc?export=view&id=15pbzbPmjxhMwwKelKp9jhFIsGOMjooJK"
+        alt="Universal Tribes Logo"
+        class="company-logo"
+      />
+      <h1>Universal Tribes</h1>
+    </header>
 
-        <!-- Form for invoice / quotation details -->
-        <form id="invoice-form">
-            <h2>Create Invoice or Quotation</h2>
+    <form id="invoice-form">
+      <h2>Create Invoice or Quotation</h2>
 
-            <!-- Document type selection -->
-            <label for="docType">Document Type:</label>
-            <select id="docType" name="docType" required>
-                <option value="Invoice">Invoice</option>
-                <option value="Quotation">Quotation</option>
-            </select>
+      <label for="docType">Document Type:</label>
+      <select id="docType" name="docType" required>
+        <option value="Invoice">Invoice</option>
+        <option value="Quotation">Quotation</option>
+      </select>
 
-            <!-- Document number / order id -->
-            <label for="docNumber">Invoice / Order Number:</label>
-            <input type="text" id="docNumber" name="docNumber" placeholder="Enter Invoice or Order Number" required />
+      <label for="docNumber">Invoice / Order Number:</label>
+      <input
+        type="text"
+        id="docNumber"
+        name="docNumber"
+        placeholder="Enter Invoice or Order Number"
+        required
+      />
 
-            <!-- Date -->
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required />
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" required />
 
-            <!-- Client details -->
-            <h3>Client Details</h3>
-            <label for="clientName">Client Name:</label>
-            <input type="text" id="clientName" name="clientName" required />
+      <h3>Client Details</h3>
+      <label for="clientName">Client Name:</label>
+      <input type="text" id="clientName" name="clientName" required />
 
-            <label for="clientEmail">Client Email:</label>
-            <input type="email" id="clientEmail" name="clientEmail" required />
+      <label for="clientEmail">Client Email:</label>
+      <input type="email" id="clientEmail" name="clientEmail" required />
 
-            <label for="clientPhone">Client Phone Number:</label>
-            <input type="tel" id="clientPhone" name="clientPhone" required />
+      <label for="clientPhone">Client Phone Number:</label>
+      <input type="tel" id="clientPhone" name="clientPhone" required />
 
-            <label for="clientAddress">Client Address:</label>
-            <textarea id="clientAddress" name="clientAddress" rows="3" required></textarea>
+      <label for="clientAddress">Client Address:</label>
+      <textarea id="clientAddress" name="clientAddress" rows="3" required></textarea>
 
-            <!-- Items table -->
-            <h3>Items / Products</h3>
-            <div id="items-container">
-                <div class="item-row">
-                    <input type="text" name="itemName" placeholder="Item Name" required />
-                    <input type="number" name="itemQty" placeholder="Qty" min="1" required />
-                    <input type="number" name="itemPrice" placeholder="Unit Price" min="0" step="0.01" required />
-                    <button type="button" class="remove-item-btn">Remove</button>
-                </div>
-            </div>
-            <button type="button" id="add-item-btn">Add Item</button>
+      <h3>Items / Products</h3>
+      <div id="items-container">
+        <div class="item-row">
+          <input
+            type="text"
+            name="itemName"
+            placeholder="Item Name"
+            required
+          />
+          <input
+            type="number"
+            name="itemQty"
+            placeholder="Qty"
+            min="1"
+            required
+          />
+          <input
+            type="number"
+            name="itemPrice"
+            placeholder="Unit Price"
+            min="0"
+            step="0.01"
+            required
+          />
+          <button type="button" class="remove-item-btn">Remove</button>
+        </div>
+      </div>
+      <button type="button" id="add-item-btn">Add Item</button>
 
-            <!-- Notes -->
-            <label for="notes">Additional Notes:</label>
-            <textarea id="notes" name="notes" rows="3" placeholder="Any extra info or terms"></textarea>
+      <label for="notes">Additional Notes:</label>
+      <textarea
+        id="notes"
+        name="notes"
+        rows="3"
+        placeholder="Any extra info or terms"
+      ></textarea>
 
-            <!-- Generate PDF -->
-            <button type="submit" id="generate-btn">Download PDF</button>
-        </form>
+      <button type="submit" id="generate-btn">Download PDF</button>
+    </form>
 
-        <!-- Invoice Preview (hidden, used for PDF generation) -->
-        <div id="invoice-preview" style="display:none;"></div>
-    </div>
+    <!-- Hidden invoice preview for PDF generation -->
+    <div id="invoice-preview" class="invoice-preview" style="display: none;"></div>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
