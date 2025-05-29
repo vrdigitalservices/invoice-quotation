@@ -1,95 +1,170 @@
-document.getElementById("downloadBtn").addEventListener("click", () => {
-    const docType = document.getElementById("docType").value;
-    const docNumber = document.getElementById("invoice-number").value.trim() || "document";
-    const customerName = document.getElementById("customerName").value.trim();
-    const customerAddress = document.getElementById("customerAddress").value.trim();
-    const itemDesc = document.getElementById("itemDesc").value.trim();
-    const quantity = parseInt(document.getElementById("quantity").value);
-    const rate = parseFloat(document.getElementById("rate").value);
-    const gst = parseFloat(document.getElementById("gst").value);
+// Add / Remove Item Rows
+const addItemBtn = document.getElementById('add-item-btn');
+const itemsContainer = document.getElementById('items-container');
 
-    if (!customerName || !customerAddress || !itemDesc || !quantity || !rate || isNaN(gst)) {
-        alert("Please fill all fields correctly.");
-        return;
+addItemBtn.addEventListener('click', () => {
+  const itemRow = document.createElement('div');
+  itemRow.classList.add('item-row');
+  itemRow.innerHTML = `
+    <input type="text" name="itemName" placeholder="Item Name" required />
+    <input type="number" name="itemQty" placeholder="Qty" min="1" required />
+    <input type="number" name="itemPrice" placeholder="Unit Price" min="0" step="0.01" required />
+    <button type="button" class="remove-item-btn">Remove</button>
+  `;
+  itemsContainer.appendChild(itemRow);
+
+  itemRow.querySelector('.remove-item-btn').addEventListener('click', () => {
+    itemRow.remove();
+  });
+});
+
+// Remove buttons for existing rows
+document.querySelectorAll('.remove-item-btn').forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+    e.target.closest('.item-row').remove();
+  });
+});
+
+const form = document.getElementById('invoice-form');
+const invoicePreview = document.getElementById('invoice-preview');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Get form values
+  const docType = form.docType.value;
+  const docNumber = form.docNumber.value.trim();
+  const date = form.date.value;
+  const clientName = form.clientName.value.trim();
+  const clientEmail = form.clientEmail.value.trim();
+  const clientPhone = form.clientPhone.value.trim();
+  const clientAddress = form.clientAddress.value.trim();
+  const notes = form.notes.value.trim();
+
+  // Collect items data
+  const items = [];
+  const itemRows = itemsContainer.querySelectorAll('.item-row');
+  itemRows.forEach((row) => {
+    const name = row.querySelector('input[name="itemName"]').value.trim();
+    const qty = parseInt(row.querySelector('input[name="itemQty"]').value);
+    const price = parseFloat(row.querySelector('input[name="itemPrice"]').value);
+    if (name && qty > 0 && price >= 0) {
+      items.push({ name, qty, price });
     }
+  });
 
-    // Calculations
-    const subtotal = quantity * rate;
-    const gstAmount = (subtotal * gst) / 100;
-    const total = subtotal + gstAmount;
+  if (items.length === 0) {
+    alert('Please add at least one valid item.');
+    return;
+  }
 
-    // Create invoice HTML
-    const invoiceHTML = `
-        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 700px;">
-            <h2 style="color: #5b2c6f;">Universal Tribes</h2>
-            <p>Near, D-3/5, Shiv Shanker Society, KK Market Rd, Bibwewadi, Pune, Maharashtra 411037</p>
-            <p>Email: info@universaltribes.com | Phone: 81423 11100</p>
-            <p>GSTIN: 27AALCT2080P1ZP | PAN: AALCT20280P</p>
-            <p>Website: <a href="https://universaltribes.com/" target="_blank">universaltribes.com</a></p>
-            <hr style="margin: 20px 0;" />
+  // Calculate totals
+  let subTotal = 0;
+  items.forEach((item) => {
+    subTotal += item.qty * item.price;
+  });
 
-            <h3>${docType} #: ${docNumber}</h3>
-            <p><strong>Bill To:</strong> ${customerName}</p>
-            <p>${customerAddress.replace(/\n/g, "<br>")}</p>
-            <hr style="margin: 20px 0;" />
+  const taxRate = 0.18; // 18% GST for example
+  const taxAmount = subTotal * taxRate;
+  const grandTotal = subTotal + taxAmount;
 
-            <table width="100%" border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse;">
-                <thead style="background-color: #5b2c6f; color: white;">
-                    <tr>
-                        <th align="left">Description</th>
-                        <th align="right">Quantity</th>
-                        <th align="right">Rate (₹)</th>
-                        <th align="right">Amount (₹)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>${itemDesc}</td>
-                        <td align="right">${quantity}</td>
-                        <td align="right">${rate.toFixed(2)}</td>
-                        <td align="right">${subtotal.toFixed(2)}</td>
-                    </tr>
-                </tbody>
-            </table>
+  // Build invoice HTML for preview and PDF
+  invoicePreview.innerHTML = `
+    <header>
+      <img src="https://drive.google.com/uc?export=view&id=15pbzbPmjxhMwwKelKp9jhFIsGOMjooJK" alt="Universal Tribes Logo" />
+      <div class="company-info">
+        <strong>Universal Tribes</strong><br />
+        Phone: +91 12345 67890<br />
+        Email: info@universaltribes.com<br />
+        Website: www.universaltribes.com
+      </div>
+    </header>
+    <h2>${docType}</h2>
+    <div class="section">
+      <strong>${docType} Number:</strong> ${docNumber}<br />
+      <strong>Date:</strong> ${date}
+    </div>
+    <div class="section">
+      <h3>Bill To:</h3>
+      <strong>${clientName}</strong><br />
+      Email: ${clientEmail}<br />
+      Phone: ${clientPhone}<br />
+      Address:<br />
+      ${clientAddress.replace(/\n/g, '<br />')}
+    </div>
+    <div class="section">
+      <h3>Items</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Sr.</th>
+            <th>Item Description</th>
+            <th>Qty</th>
+            <th>Unit Price (₹)</th>
+            <th>Total (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items
+            .map(
+              (item, i) =>
+                `<tr>
+                  <td>${i + 1}</td>
+                  <td>${item.name}</td>
+                  <td>${item.qty}</td>
+                  <td>${item.price.toFixed(2)}</td>
+                  <td>${(item.qty * item.price).toFixed(2)}</td>
+                </tr>`
+            )
+            .join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="section totals">
+      <table>
+        <tr>
+          <th>Subtotal:</th>
+          <td>₹${subTotal.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <th>GST (18%):</th>
+          <td>₹${taxAmount.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <th>Total:</th>
+          <td><strong>₹${grandTotal.toFixed(2)}</strong></td>
+        </tr>
+      </table>
+    </div>
+    <div class="section">
+      <h3>Notes:</h3>
+      <p>${notes || 'N/A'}</p>
+    </div>
+    <footer>
+      <p>Thank you for your business!</p>
+    </footer>
+  `;
 
-            <table width="100%" cellspacing="0" cellpadding="8" style="margin-top: 15px;">
-                <tbody>
-                    <tr>
-                        <td align="right"><strong>Subtotal:</strong></td>
-                        <td align="right">₹${subtotal.toFixed(2)}</td>
-                    </tr>
-                    <tr>
-                        <td align="right"><strong>GST (${gst}%):</strong></td>
-                        <td align="right">₹${gstAmount.toFixed(2)}</td>
-                    </tr>
-                    <tr>
-                        <td align="right"><strong>Total:</strong></td>
-                        <td align="right"><strong>₹${total.toFixed(2)}</strong></td>
-                    </tr>
-                </tbody>
-            </table>
+  invoicePreview.style.display = 'block';
 
-            <div style="margin-top: 40px; font-style: italic; color: #555;">
-                <p>Bank Details will be added later.</p>
-                <p>Thank you for your business!</p>
-            </div>
-        </div>
-    `;
+  // Generate PDF
+  const { jsPDF } = window.jspdf;
 
-    // Insert invoice preview (optional - for visual confirmation before download)
-    const preview = document.getElementById("invoice-preview");
-    preview.innerHTML = invoiceHTML;
-    preview.style.display = "block";
+  try {
+    const canvas = await html2canvas(invoicePreview, { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
 
-    // PDF generation options
-    const opt = {
-        margin: 0.5,
-        filename: `${docType}_${docNumber}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-    // Generate and save PDF
-    html2pdf().set(opt).from(preview).save();
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+    pdf.save(`${docNumber}_${docType}.pdf`);
+  } catch (error) {
+    alert('Failed to generate PDF. Please try again.');
+    console.error(error);
+  }
+
+  invoicePreview.style.display = 'none';
 });
